@@ -10,7 +10,7 @@ https://www.amazon.com/dp/B07GQPT9VG?psc=1&ref=ppx_yo2_dt_b_product_details
 
 *Figure 1.* DROK Model: XY-T01
 
-The program sets up two serial ports on an ESP32 - one to talk to the DROK, and one to report to the serial monitor in the Arduino IDE.
+The program sets up two serial ports on an ESP32 - one to talk to the DROK, and one to report to the serial monitor in the Arduino IDE. You should be able to port this to other Arduino compatible boards pretty easily if they support multiple serial ports. 
   
 After initializing the ports, setup() sends a "start" message to the controller to begin logging temperature and relay state. 
   
