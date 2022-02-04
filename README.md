@@ -5,8 +5,10 @@ An Arduino sketch for the ESP32  to control / log data from a Thermostat Control
   
 I got mine on Amazon: 
 https://www.amazon.com/dp/B07GQPT9VG?psc=1&ref=ppx_yo2_dt_b_product_details
- 
-DROK Model: XY-T01
+
+![Drok Controller](./doc/drok1.jpg)
+
+*Figure 1.* DROK Model: XY-T01
 
 The program sets up two serial ports on an ESP32 - one to talk to the DROK, and one to report to the serial monitor in the Arduino IDE.
   
