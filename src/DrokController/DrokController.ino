@@ -44,7 +44,7 @@ bool   logging = false;  // When logging, the Drok periodically reports T and Re
 // Declares
 String drokCommand(String command); // Send a command to the Drok and wait for a reply.
 String getValue(String data, char separator, int index); // String tokenizer function.
-void   processDrokReport(String drokMessage); // Message cleanup for data reported while logging.
+void   updateTemperatureAndRelay(String drokMessage); // Message cleanup for data reported while logging.
 
 
 /*******************************************************************/
@@ -58,7 +58,6 @@ void setup()
   drokUART.begin(9600, SERIAL_8N1, 33, 25);                                          
   
   delay(1000); // Wait a bit for the ports to initialize
-
 
   debugUART.println("---------------------------------------------");
   debugUART.println("Drok Digital Thermostat Controller");
@@ -94,7 +93,7 @@ void loop()
   if (drokUART.available()){    
     s = drokUART.readStringUntil('\n');
     if (logging){
-      processDrokReport(s);
+      updateTemperatureAndRelay(s);
       debugUART.println(temperature + "," + 10*(relay == "OP"));
     } else {
       debugUART.println(s);
@@ -121,7 +120,16 @@ String getValue(String data, char separator, int index)
           strIndex[1] = (i == maxIndex) ? i+1 : i;
       }
   }
-  return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
+
+  String s;
+  if (found>index) {
+    s = data.substring(strIndex[0], strIndex[1]);
+    s.trim();
+  } else {
+    s = "";
+  } 
+  
+  return s;
 }
 
 
@@ -130,18 +138,16 @@ String getValue(String data, char separator, int index)
  *  in some garbage characters after the Temperature reading. 
  *  This takes care of that.
  */
-void processDrokReport(String drokMessage)
+void updateTemperatureAndRelay(String drokMessage)
 {
     temperature = getValue(drokMessage,',',0);
-    temperature.trim();
     
     int len1 = temperature.length();
     if (len1>=2){ // Remove garbage characters from controller message. 
       temperature = temperature.substring(0,len1-2);
     }
     
-    relay = getValue(drokMessage,',',1);
-    relay.trim();
+    relay = getValue(drokMessage,',',1); 
 }
 
 
