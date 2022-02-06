@@ -43,8 +43,8 @@ bool   logging = false;  // When logging, the Drok periodically reports T and Re
 
 // Declares
 String drokCommand(String command); // Send a command to the Drok and wait for a reply.
-String getValue(String data, char separator, int index); // String tokenizer function.
-void   updateTemperatureAndRelay(String drokMessage); // Message cleanup for data reported while logging.
+String extractValue(String data, char separator, int index); // String tokenizer function.
+void   updateTemperatureAndRelay(String drokMessage); // Process data reported by Drok when logging.
 
 
 /*******************************************************************/
@@ -105,9 +105,9 @@ void loop()
 
 /*******************************************************************
 * A little string tokenizer function to pull values our of the 
-* Drok's reports
+* Drok's report strings
  */
-String getValue(String data, char separator, int index)
+String extractValue(String data, char separator, int index)
 {
   int found = 0;
   int strIndex[] = { 0, -1 };
@@ -140,14 +140,14 @@ String getValue(String data, char separator, int index)
  */
 void updateTemperatureAndRelay(String drokMessage)
 {
-    temperature = getValue(drokMessage,',',0);
+    temperature = extractValue(drokMessage,',',0);
     
     int len1 = temperature.length();
     if (len1>=2){ // Remove garbage characters from controller message. 
       temperature = temperature.substring(0,len1-2);
     }
     
-    relay = getValue(drokMessage,',',1); 
+    relay = extractValue(drokMessage,',',1); 
 }
 
 
